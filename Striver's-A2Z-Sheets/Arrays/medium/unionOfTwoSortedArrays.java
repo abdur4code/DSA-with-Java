@@ -19,24 +19,80 @@
 // 1  ≤  a.size(), b.size()  ≤  105
 // -109 ≤ a[i], b[i] ≤109
 import java.util.ArrayList;
-import java.util.Collections;
 class Solution {
     public static ArrayList<Integer> findUnion(int a[], int b[]) {
         // code here
         ArrayList<Integer> res = new ArrayList<>();
         
-        for (int i=0; i<a.length; i++){
-            if (!res.contains(a[i])){
-                res.add(a[i]);
+        int i = 0; 
+        int j = 0;
+        
+        int ce = 0;
+        
+        while (i < a.length && j < b.length){
+            if (a[i] < b[j]){
+                ce = a[i];
+                if (res.size() == 0 || res.get(res.size()-1) != ce){
+                    res.add(ce);
+                }
+                i++;
+            }
+            else if(a[i] > b[j]){
+                ce = b[j];
+                if (res.size() == 0 || res.get(res.size()-1) != ce){
+                    res.add(ce);
+                }
+                j++;
+            }
+            else{
+                ce = b[j];
+                if (res.size() == 0 || res.get(res.size()-1) != ce){
+                    res.add(ce);
+                }
+                j++;
+                i++;
             }
         }
         
-        for (int j=0; j<b.length; j++){
-            if (!res.contains(b[j])){
-               res.add(b[j]); 
+        while (i < a.length){
+            if (res.size() == 0 || res.get(res.size()-1) != a[i]){
+                res.add(a[i]);
             }
+            i++;
         }
-        Collections.sort(res);
+        
+        while (j < b.length){
+            if (res.size() == 0 || res.get(res.size()-1) != b[j]){
+                res.add(b[j]);
+            }
+            j++;
+        }
+        
         return res;
     }
 }
+
+
+/*
+ * Union of Two Sorted Arrays
+ *
+ * both arrays are sorted so I can use two pointers
+ * walk both arrays together, always pick the smaller one
+ * this way result stays sorted automatically
+ *
+ * 3 cases:
+ * a[i] < b[j]  → add a[i], move i
+ * a[i] > b[j]  → add b[j], move j
+ * a[i] == b[j] → add once, move both
+ *
+ * to skip duplicates → compare with last element in res
+ * no need to scan whole list like contains()
+ *
+ * after main loop one array might still have elements
+ * so drain both arrays with two separate while loops
+ * always move pointer outside the duplicate check
+ * otherwise infinite loop if duplicate found
+ *
+ * TC → O(n + m)  each element touched once
+ * SC → O(n + m)  res stores at most n+m elements
+ */
