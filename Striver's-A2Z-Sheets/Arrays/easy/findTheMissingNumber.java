@@ -18,36 +18,31 @@
 // 1 ≤ arr.size() ≤ 106
 // 1 ≤ arr[i] ≤ arr.size() + 1
 
-import java.util.Arrays;
-
 class Solution {
     int missingNum(int arr[]) {
 
-        int count = 1;
-        int result = 1;
+        // idea: sum of 1 to n is a known formula — n*(n+1)/2
+        // if i subtract the actual array sum from expected sum, i get the missing number
+        // clean, no sorting needed
 
-        Arrays.sort(arr); // O(n log n) — this is the bottleneck
+        // IMPORTANT: n can be up to 10^6, so n*(n+1) can hit ~10^12
+        // int max is only ~2.1 billion — so i must use long to avoid overflow
+        // lesson learned the hard way lol
 
+        long sum = 0;
         for (int i = 0; i < arr.length; i++) {
-            if (arr[i] != count) {
-                result = count; // sequence broke here — count is the missing number
-                break;
-            }
-            count++;
-            result = count; // keep updating in case missing number is at the end
+            sum += arr[i]; // accumulate actual sum
         }
 
-        return result;
+        long n = arr.length + 1; // n is size+1 because one element is missing
+        long exSum = (n * (n + 1)) / 2; // expected sum formula — n must be long here!
+        // if n is int, n*(n+1) overflows BEFORE assignment to long — sneaky bug
+
+        long result = exSum - sum; // missing number is the difference
+
+        return (int) result;
     }
 }
 
-// idea: if i sort the array, the missing number will break the sequence
-// so i just walk through and compare each element with what i expect (count)
-// the moment they don't match — that's my missing number
-
-// edge case: if missing number is the last one (n itself),
-// the loop ends without breaking — result holds the final incremented count which is correct
-
-
-// TC: O(n log n) — sorting dominates
-// SC: O(1) — no extra space used
+// TC: O(n) — single loop, everything else is O(1)
+// SC: O(1) — no extra space
