@@ -58,3 +58,79 @@ class Solution {
         return xor; // only the single number remains
     }
 }
+
+
+// =============Notes of all approaches=============
+
+/*
+============================================================
+LC 136 — Single Number
+============================================================
+
+PROBLEM
+-------
+Array where every element appears twice except one.
+Find the single one.
+Constraint: O(n) time, O(1) space.
+
+EXAMPLES
+--------
+[2, 2, 1]       → 1
+[4, 1, 2, 1, 2] → 4
+[1]             → 1
+
+------------------------------------------------------------
+APPROACH 1 — Brute Force (my first attempt)
+------------------------------------------------------------
+Idea    : For each element, scan the rest of the array
+          Used circular traversal to avoid self-comparison
+TC      : O(n²)
+SC      : O(1)
+Verdict : Correct logic, too slow
+
+------------------------------------------------------------
+APPROACH 2 — Sort + Compare Pairs
+------------------------------------------------------------
+Idea    : Sort array → duplicates sit next to each other
+          Walk two steps at a time, compare nums[i] != nums[i+1]
+          If loop ends without finding → single is at last index
+TC      : O(n log n)
+SC      : O(1)
+Verdict : Better, but sorting cost doesn't meet constraint
+
+Lesson  : Don't use magic numbers as sentinels (used 40000, risky)
+          Better to initialize result = nums[n-1] upfront
+
+------------------------------------------------------------
+APPROACH 3 — XOR (optimal)
+------------------------------------------------------------
+Core insight:
+  a ^ a = 0    → duplicates cancel each other
+  a ^ 0 = a    → unique number survives
+
+Algorithm:
+  xor = 0
+  for every num in array:
+      xor = xor ^ num
+  return xor
+
+Dry run [4, 1, 2, 1, 2]:
+  0 ^ 4 = 4
+  4 ^ 1 = 5
+  5 ^ 2 = 7
+  7 ^ 1 = 6   (1 cancels)
+  6 ^ 2 = 4   (2 cancels) ✓
+
+TC      : O(n)
+SC      : O(1)
+Verdict : Optimal ✓ — beats 99.98%
+
+------------------------------------------------------------
+KEY LESSONS
+------------------------------------------------------------
+1. Sorted array → think pairs/two-pointer patterns
+2. XOR is the go-to when duplicates need to cancel
+3. Magic number sentinels are dangerous — avoid them
+4. Same number XOR itself always = 0 (bit level cancellation)
+============================================================
+*/
