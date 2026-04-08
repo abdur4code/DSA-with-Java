@@ -24,34 +24,26 @@ Constraints:
 -3 * 104 <= nums[i] <= 3 * 104
 Each element in the array appears twice except for one element which appears only once.*/
 
+import java.util.Arrays;
 class Solution {
     public int singleNumber(int[] nums) {
-        
-        int result = 0;
-        int n = nums.length;
+       
+        Arrays.sort(nums);
 
-        if (n == 1){
+        int n = nums.length;
+        int result = nums[n-1];
+
+        if(n == 1){
             result = nums[0];
         }
 
-        for (int i = 0; i < n; i++){
-            int startIndex = i + 1;
-            if(i == nums.length-1){
-                startIndex = 0;
-            }
-            boolean unique = true;
-            for (int j = 0; j < n-1; j++){
-                int currentIndex = (startIndex + j) % n;
-                if (nums[i] == nums[currentIndex]){
-                    unique = false;
-                    break;
-                }
-            }
-            if(unique){
+        for (int i = 0; i < n - 1; i=i+2){
+            if(nums[i] != nums[i + 1]){
                 result = nums[i];
                 break;
             }
         }
+        
         return result;
     }
 }
