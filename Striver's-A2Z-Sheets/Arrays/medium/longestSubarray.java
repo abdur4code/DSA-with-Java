@@ -22,33 +22,46 @@ Constraints:
 -104 ≤ arr[i] ≤ 104
 -109 ≤ k ≤ 109*/
 
+import java.util.HashMap;
+
 class Solution {
     public int longestSubarray(int[] arr, int k) {
-        // code here
-        
-        int n = arr.length;
-        int max = 0;
-        int count = 0;
-        
-        if ((n == 1) && (arr[0] == k)){
-            max = n;
-        }
-        
-        for (int i = 0; i<n; i++){
-            int sum = arr[i];
-            for (int j = i+1; j<n; j++){
-                sum += arr[j];
-                if (sum == k){
-                    count = (j+1) - i;
-                }
-                max = Math.max(max, count);
-                count = 0;
+
+        // maps prefix sum → earliest index it appeared at
+        HashMap<Integer, Integer> seen = new HashMap<>();
+
+        // seed with 0 at index -1 so subarrays starting
+        // from index 0 are handled correctly
+        seen.put(0, -1);
+
+        int prefSum = 0;
+        int maxLen = 0;
+
+        for (int i = 0; i < arr.length; i++) {
+            prefSum += arr[i];
+
+            // if (prefSum - k) was seen before, a valid
+            // subarray exists from that index+1 to i
+            if (seen.containsKey(prefSum - k)) {
+                int earliestIdx = seen.get(prefSum - k);
+                maxLen = Math.max(maxLen, i - earliestIdx);
             }
-            if(arr[i] == k && max == 0){
-                max = 1;
+
+            // only store first occurrence — earlier index
+            // gives us longer subarrays
+            if (!seen.containsKey(prefSum)) {
+                seen.put(prefSum, i);
             }
         }
-        
-        return max;
+
+        return maxLen;
     }
 }
+/* 
+=====================key insights to remember========================
+Prefix sum turns a subarray sum problem into a difference of two running totals problem.
+Always seed the HashMap with (0, -1) to handle subarrays starting from index 0.
+For longest subarray → store first occurrence. For count of subarrays → store frequency.
+Two nested loops multiply complexity. Two sequential independent blocks add complexity. Keep responsibilities separate.
+When you see "subarray sum = k" on any array (including negatives), think prefix sum + HashMap first.
+*/
