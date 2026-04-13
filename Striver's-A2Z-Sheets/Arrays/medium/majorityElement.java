@@ -26,7 +26,7 @@ The input is generated such that a majority element will exist in the array.
 
 Follow-up: Could you solve the problem in linear time and in O(1) space?
 */
-
+import java.util.HashMap;
 // =====================Approach 1: Brute Force=====================
 class Solution {
     public int majorityElement(int[] nums) {
@@ -48,3 +48,27 @@ class Solution {
 
 // -----> Time Complexity: O(n^2)<-----> Space Complexity: O(1)<-----
 
+// =====================Approach 2: HashMap=====================
+class Solution2 {
+    public int majorityElement(int[] nums) {
+        
+        int n = nums.length;
+        int result = nums[0];
+        int max = 0;
+
+        HashMap<Integer, Integer> map = new HashMap<>();
+
+        for (int i = 0; i < n; i++){
+            if (map.containsKey(nums[i])){
+                map.put(nums[i], map.getOrDefault(nums[i], 1) + 1);
+                if (map.get(nums[i]) > max) result = nums[i];
+                max = Math.max(max, map.get(nums[i]));
+            }
+            else{
+                map.put(nums[i], 1);
+            }
+        }
+
+        return result;
+    }
+}
