@@ -1,31 +1,43 @@
 
 // 169. Majority Element
-/* 
-Given an array nums of size n, return the majority element.
-The majority element is the element that appears more than ⌊n / 2⌋ times. You may assume that the majority element always exists in the array.
 
- 
+// Problem: 169. Majority Element
+// Link: https://leetcode.com/problems/majority-element/
+// Difficulty: Easy
 
-Example 1:
+// Problem Statement:
+// Given an array nums of size n, return the element that appears more than n/2 times.
+// Majority element is guaranteed to exist.
 
-Input: nums = [3,2,3]
-Output: 3
-Example 2:
+// =====================================================================
+// APPROACH 1: Brute Force
+// =====================================================================
+// Check every element, count its occurrences using nested loop.
+// TC: O(n^2) | SC: O(1)
 
-Input: nums = [2,2,1,1,1,2,2]
-Output: 2
- 
+// =====================================================================
+// APPROACH 2: HashMap
+// =====================================================================
+// Store frequency of each element in a map, track max frequency.
+// TC: O(n) | SC: O(n)
 
-Constraints:
+// =====================================================================
+// APPROACH 3: Boyer-Moore Voting Algorithm (OPTIMAL)
+// =====================================================================
+// Intuition: imagine a "room war" — every time two different elements
+// meet, they cancel each other out and leave the room.
+// The majority element appears more than n/2 times, so it CANNOT be
+// fully cancelled. Whatever candidate survives at the end is the answer.
+//
+// candidate = current surviving element
+// count = how many of them are left standing
+//
+// - same as candidate → count++
+// - different → count--
+// - count hits 0 → new candidate takes over
+//
+// TC: O(n) | SC: O(1)
 
-n == nums.length
-1 <= n <= 5 * 104
--109 <= nums[i] <= 109
-The input is generated such that a majority element will exist in the array.
- 
-
-Follow-up: Could you solve the problem in linear time and in O(1) space?
-*/
 import java.util.HashMap;
 // =====================Approach 1: Brute Force=====================
 class Solution {
@@ -72,3 +84,26 @@ class Solution2 {
         return result;
     }
 }
+
+// ------> Time Complexity: O(n)<-----> Space Complexity: O(n)<-----
+
+// ============Approach 3: Boyer-Moore Voting Algorithm=====================
+class Solution3 {
+    public int majorityElement(int[] nums) {
+        
+        int major = nums[0];
+        int count = 0;
+
+        for (int i = 0; i < nums.length; i++){
+            if (nums[i] == major) count++;
+            else if (count != 0) count--;
+            else{
+                major = nums[i];
+                count++;
+            }
+        }
+        return major;
+    }
+}
+
+// ------> Time Complexity: O(n)<-----> Space Complexity: O(1)<-----
