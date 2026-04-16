@@ -25,3 +25,28 @@ class Solution {
         return max;
     }
 }
+
+// ─────────────────────────────────────────
+// APPROACH 2 — Kadane's Algorithm (OPTIMAL) ✅
+// walk left to right with a running sum
+// core idea: a negative running sum only hurts future elements
+//            so reset to 0 when sum goes negative (drop the bag)
+// at every step update max
+// TC: O(n) | SC: O(1)
+// ─────────────────────────────────────────
+
+class Solution {
+    public int maxSubArray(int[] nums) {
+        
+        // start max at first element to handle all-negative arrays
+        int max = nums[0];
+        int sum = 0;
+
+        for(int i = 0; i < nums.length; i++){
+            sum += nums[i];                  // extend current subarray
+            max = Math.max(max, sum);        // update best seen so far
+            if (sum < 0) sum = 0;           // drop the bag if sum goes negative
+        }
+        return max;
+    }
+}
