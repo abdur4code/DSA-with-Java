@@ -35,7 +35,7 @@ class Solution {
 // TC: O(n) | SC: O(1)
 // ─────────────────────────────────────────
 
-class Solution {
+class Solution2 {
     public int maxSubArray(int[] nums) {
         
         // start max at first element to handle all-negative arrays
