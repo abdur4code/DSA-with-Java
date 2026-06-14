@@ -34,7 +34,9 @@ Could you devise a constant space solution?
 */
 
 //Brute Force
-//Time Complexity: O(m*n*(m+n)) Space Complexity: O(1) 
+//Time Complexity: O(m*n*(m+n)) Space Complexity: O(1)
+
+import java.util.*;
 public class setMatrixZeroes {
      public void setZeroes(int[][] matrix) {
         //Brute Force
@@ -73,6 +75,38 @@ public class setMatrixZeroes {
         for(int i = 0; i < m; i++) {
             if(matrix[i][j] != 0) {
                 matrix[i][j] = -1;
+            }
+        }
+    }
+}
+
+ //Better Solution
+//Time Complexity: O(m*n) Space Complexity: O(m+n)
+class setMatrixZeroes2 {
+    public void setZeroes(int[][] matrix) {
+        //Better Solution
+        int m = matrix.length;
+        int n = matrix[0].length;
+
+        int[] rowMark = new int[m];
+        Arrays.fill(rowMark, 0);
+        int[] colMark = new int[n];
+        Arrays.fill(colMark, 0);
+
+        for(int i = 0; i < m; i++) {
+            for(int j = 0; j < n; j++) {
+                if(matrix[i][j] == 0) {
+                    rowMark[i] = 1;
+                    colMark[j] = 1;
+                }
+            }
+        }
+
+        for(int i = 0; i < m; i++) {
+            for(int j = 0; j < n; j++) {
+                if(rowMark[i] == 1 || colMark[j] == 1) {
+                    matrix[i][j] = 0;
+                }
             }
         }
     }
